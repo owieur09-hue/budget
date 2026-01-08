@@ -69,9 +69,10 @@ const Statistics: React.FC<StatisticsProps> = ({ currentDate, transactions, cate
   const maxCategoryAmount = Math.max(...stats.categoryStats.map(s => s.current), 1);
 
   return (
-    <div className="flex flex-col h-full bg-white animate-in slide-in-from-bottom-5 duration-300">
+    /* 캘린더와 동일하게 pb-24와 bg-white 적용 */
+    <div className="w-full pb-24 bg-white animate-in slide-in-from-bottom-5 duration-300">
       
-      {/* Header with Black Line and Rounded Pill */}
+      {/* Header */}
       <div className="pt-12 pb-2 px-6">
         <div className="relative flex items-center justify-center mb-6">
             <div className="absolute inset-0 flex items-center">
@@ -96,8 +97,8 @@ const Statistics: React.FC<StatisticsProps> = ({ currentDate, transactions, cate
         </div>
       </div>
 
-      {/* Content starts here */}
-      <div className="flex-1 overflow-y-auto px-6 pb-28 space-y-6">
+      {/* Content */}
+      <div className="px-6 space-y-6">
         
         {/* 1. Total Comparison */}
         <div className="bg-white border border-gray-200 rounded-[2rem] p-6 shadow-sm">
