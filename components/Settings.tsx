@@ -233,8 +233,8 @@ const Settings: React.FC<SettingsProps> = ({
         </div>
       </div>
       
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 pb-28">
+      {/* Content 영역: pb-28을 pb-4로 대폭 줄여 하단바 직전까지 노출되도록 수정 */}
+      <div className="flex-1 overflow-y-auto px-6 pb-4">
         
         {/* --- CATEGORY TAB --- */}
         {tab === 'CATEGORY' && (
@@ -255,7 +255,6 @@ const Settings: React.FC<SettingsProps> = ({
                   value={newCatName}
                   onChange={e => setNewCatName(e.target.value)}
                   placeholder="이모지 + 이름"
-                  /* flex-1 min-w-0 적용 */
                   className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl px-4 text-sm outline-none focus:border-black h-11"
                  />
                  <button onClick={handleAddCategory} className="flex-none bg-black text-white px-4 rounded-xl hover:bg-gray-800 h-11 shadow-md">
@@ -299,7 +298,6 @@ const Settings: React.FC<SettingsProps> = ({
                     <select 
                       value={fixedCatId}
                       onChange={e => setFixedCatId(e.target.value)}
-                      /* flex-1 min-w-0 적용 */
                       className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl text-xs px-2 text-black outline-none h-10"
                     >
                       <option value="">카테고리 선택</option>
@@ -388,7 +386,6 @@ const Settings: React.FC<SettingsProps> = ({
                   value={newProfileName}
                   onChange={e => setNewProfileName(e.target.value)}
                   placeholder="이름"
-                  /* flex-1 min-w-0 적용 */
                   className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl px-4 text-sm outline-none focus:border-black h-11"
                  />
                  <button onClick={handleAddProfile} className="flex-none bg-black text-white px-4 rounded-xl hover:bg-gray-800 h-11 shadow-md">
