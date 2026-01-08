@@ -8,22 +8,15 @@
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
       
-      :root {
-        --sat: env(safe-area-inset-top);
-        --sab: env(safe-area-inset-bottom);
-      }
-
       body {
         font-family: 'Gowun Dodum', sans-serif;
         overscroll-behavior: none;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
-        background-color: #f5f5f5;
+        background-color: #ffffff;
         margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        /* 실제 모바일 화면 높이를 사용 */
+        height: calc(var(--vh, 1vh) * 100);
         width: 100vw;
         overflow: hidden;
       }
@@ -31,10 +24,16 @@
       h1, h2, h3, h4, h5, h6, input, button, select, textarea {
         font-family: 'Gowun Dodum', sans-serif !important;
       }
-      
-      ::-webkit-scrollbar { display: none; }
-      * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
     </style>
+    <script>
+      // 모바일 브라우저의 실제 높이를 계산하는 함수
+      function setScreenSize() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      setScreenSize();
+      window.addEventListener('resize', setScreenSize);
+    </script>
     <script type="importmap">
     {
       "imports": {
@@ -47,8 +46,8 @@
     }
     </script>
   </head>
-  <body class="bg-gray-100">
-    <div id="root" class="h-full w-full max-w-md bg-white"></div>
+  <body>
+    <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
