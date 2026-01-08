@@ -9,7 +9,7 @@ import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 import TransactionForm from './components/TransactionForm';
 import { Plus } from 'lucide-react';
-
+import TransactionDetails from './components/TransactionDetails';
 const App: React.FC = () => {
   // --- State ---
   const [currentDate, setCurrentDate] = useState(new Date());
