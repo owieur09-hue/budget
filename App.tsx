@@ -8,11 +8,10 @@ import BottomBar, { BottomTab } from './components/BottomBar';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 import TransactionForm from './components/TransactionForm';
-import TransactionDetails from './components/TransactionDetails';
 import { Plus } from 'lucide-react';
 
 const App: React.FC = () => {
-  // --- State (기존 유지) ---
+  // --- State ---
   const [currentDate, setCurrentDate] = useState(new Date());
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -22,7 +21,7 @@ const App: React.FC = () => {
   const [activeSettingsTab, setActiveSettingsTab] = useState<SettingsTab | null>(null);
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
 
-  // --- Persistence (기존 유지) ---
+  // --- Persistence ---
   useEffect(() => {
     const loadData = () => {
       const storedTransactions = localStorage.getItem('calcbook_transactions');
@@ -44,7 +43,7 @@ const App: React.FC = () => {
   useEffect(() => { localStorage.setItem('calcbook_profiles', JSON.stringify(profiles)); }, [profiles]);
   useEffect(() => { localStorage.setItem('calcbook_fixed', JSON.stringify(fixedItems)); }, [fixedItems]);
 
-  // --- Fixed Item Logic (기존 유지) ---
+  // --- Fixed Item Logic ---
   useEffect(() => {
     setTransactions(currentTransactions => {
       const today = new Date();
@@ -89,8 +88,6 @@ const App: React.FC = () => {
     return balance;
   };
 
-  const isDetailsOpen = !!(selectedDate && transactions.some(t => t.date === format(selectedDate, 'yyyy-MM-dd')));
-
   const renderHeader = () => {
     if (activeSettingsTab) return null;
     return (
@@ -112,7 +109,6 @@ const App: React.FC = () => {
   };
 
   return (
-    /* w-screen과 overflow-x-hidden을 주어 가로 밀림을 강제로 방지합니다. */
     <div className="flex flex-col w-screen max-w-md mx-auto bg-white overflow-x-hidden relative shadow-2xl" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
       {renderHeader()}
 
@@ -126,8 +122,8 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* 버튼 밀림 방지: left-auto, right-6을 사용하여 기기 오른쪽 끝에 고정합니다. */}
-      {!activeSettingsTab && !isDetailsOpen && (
+      {/* 플러스 버튼: 이제 상세 내역이 열려도 사라지지 않고 항상 유지됩니다. */}
+      {!activeSettingsTab && (
         <button 
           onClick={() => setIsTransactionFormOpen(true)}
           className="fixed bottom-24 right-6 w-14 h-14 bg-black rounded-full flex items-center justify-center text-white shadow-2xl z-40 active:scale-95 transition-all"
@@ -145,21 +141,9 @@ const App: React.FC = () => {
         <TransactionForm date={selectedDate || new Date()} categories={categories} profiles={profiles} onClose={() => setIsTransactionFormOpen(false)} onSubmit={handleAddTransaction} />
       )}
 
-      {isDetailsOpen && selectedDate && (
-        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md bg-white rounded-[2.5rem] p-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
-            <TransactionDetails
-              date={selectedDate}
-              transactions={transactions.filter(t => t.date === format(selectedDate, 'yyyy-MM-dd'))}
-              categories={categories}
-              profiles={profiles}
-              onClose={() => setSelectedDate(null)}
-              onDelete={handleDeleteTransaction}
-              onAdd={() => setIsTransactionFormOpen(true)}
-            />
-          </div>
-        </div>
-      )}
+      {/* 이곳에 있던 {isDetailsOpen && selectedDate && (...)} 하단 팝업 코드를 삭제했습니다. 
+         상세 내역은 이제 Calendar.tsx 내부의 리스트를 통해서만 보게 됩니다. 
+      */}
     </div>
   );
 };
