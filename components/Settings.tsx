@@ -219,9 +219,10 @@ const Settings: React.FC<SettingsProps> = ({
   );
 
   return (
-    <div className="flex flex-col h-full bg-white animate-in slide-in-from-bottom-5 duration-300 overflow-x-hidden">
+    /* 전체 배경색과 높이 고정 */
+    <div className="flex flex-col h-full bg-white animate-in slide-in-from-bottom-5 duration-300 overflow-hidden relative">
       
-      {/* Header */}
+      {/* Header: flex-none으로 고정 */}
       <div className="pt-12 pb-2 px-6 flex-none">
         <div className="relative flex items-center justify-center mb-8">
             <div className="absolute inset-0 flex items-center">
@@ -233,8 +234,8 @@ const Settings: React.FC<SettingsProps> = ({
         </div>
       </div>
       
-      {/* Content 영역: pb-28을 pb-4로 대폭 줄여 하단바 직전까지 노출되도록 수정 */}
-      <div className="flex-1 overflow-y-auto px-6 pb-4">
+      {/* Content: pb-0으로 설정하여 하단 바 영역까지 본문이 꽉 차게 흐르도록 수정 */}
+      <div className="flex-1 overflow-y-auto px-6 pb-0 scrollbar-hide">
         
         {/* --- CATEGORY TAB --- */}
         {tab === 'CATEGORY' && (
@@ -355,11 +356,6 @@ const Settings: React.FC<SettingsProps> = ({
                    </div>
                  );
               })}
-              {fixedItems.length === 0 && (
-                <div className="text-center py-10 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
-                  <p className="text-gray-400 text-xs">고정 항목이 없습니다.</p>
-                </div>
-              )}
             </div>
           </div>
         )}
