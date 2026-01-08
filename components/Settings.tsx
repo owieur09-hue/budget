@@ -219,10 +219,11 @@ const Settings: React.FC<SettingsProps> = ({
   );
 
   return (
-    <div className="flex flex-col h-full bg-white animate-in slide-in-from-bottom-5 duration-300 overflow-x-hidden">
+    /* 캘린더와 동일하게 pb-24와 bg-white 적용 */
+    <div className="w-full pb-24 bg-white animate-in slide-in-from-bottom-5 duration-300 overflow-x-hidden">
       
       {/* Header */}
-      <div className="pt-12 pb-2 px-6 flex-none">
+      <div className="pt-12 pb-2 px-6">
         <div className="relative flex items-center justify-center mb-8">
             <div className="absolute inset-0 flex items-center">
                 <div className="w-full h-0.5 bg-black rounded-full"></div>
@@ -233,8 +234,8 @@ const Settings: React.FC<SettingsProps> = ({
         </div>
       </div>
       
-      {/* Content: pb-10으로 수정하여 하단바와의 간격을 최적화했습니다 */}
-      <div className="flex-1 overflow-y-auto px-6 pb-10">
+      {/* Content */}
+      <div className="px-6">
         
         {/* --- CATEGORY TAB --- */}
         {tab === 'CATEGORY' && (
