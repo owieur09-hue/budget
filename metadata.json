@@ -1,0 +1,5 @@
+{
+  "name": "budget",
+  "description": "A calculator-styled, mobile-optimized household account book with calendar views, recurring transactions, and budget management.",
+  "requestFramePermissions": []
+}
