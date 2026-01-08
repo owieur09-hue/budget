@@ -107,10 +107,12 @@ const Calendar: React.FC<CalendarProps> = ({
                         {format(day, 'd')}
                       </div>
 
-                      {/* Transaction Markers */}
+                      {/* Transaction Markers: 수입과 지출 모두 금액으로 표시 */}
                       <div className="flex flex-col gap-1 w-full items-center">
                         {income > 0 && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                          <span className="text-[9px] font-mono font-bold -tracking-tight text-blue-500">
+                            +{income.toLocaleString()}
+                          </span>
                         )}
                         {expense > 0 && (
                           <span className="text-[9px] font-mono font-bold -tracking-tight text-red-500">
@@ -123,7 +125,7 @@ const Calendar: React.FC<CalendarProps> = ({
                 })}
               </div>
               
-              {/* Detail View */}
+              {/* Detail View: 달력 중간에 나타나는 리스트 뷰 (이 부분은 유지합니다) */}
               {isSelectedInThisWeek && selectedDate && hasTransactionsForSelected && (
                 <div className="w-full mt-3 mb-6 bg-gray-50 rounded-3xl border border-gray-100 p-2 shadow-inner">
                    <TransactionDetails 
