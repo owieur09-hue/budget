@@ -12,7 +12,7 @@ import TransactionDetails from './components/TransactionDetails';
 import { Plus } from 'lucide-react';
 
 const App: React.FC = () => {
-  // --- State ---
+  // --- State (기존 유지) ---
   const [currentDate, setCurrentDate] = useState(new Date());
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -22,7 +22,7 @@ const App: React.FC = () => {
   const [activeSettingsTab, setActiveSettingsTab] = useState<SettingsTab | null>(null);
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
 
-  // --- Persistence ---
+  // --- Persistence (기존 유지) ---
   useEffect(() => {
     const loadData = () => {
       const storedTransactions = localStorage.getItem('calcbook_transactions');
@@ -51,7 +51,7 @@ const App: React.FC = () => {
   useEffect(() => { localStorage.setItem('calcbook_profiles', JSON.stringify(profiles)); }, [profiles]);
   useEffect(() => { localStorage.setItem('calcbook_fixed', JSON.stringify(fixedItems)); }, [fixedItems]);
 
-  // --- Fixed Item Logic ---
+  // --- Fixed Item Logic (기존 유지) ---
   useEffect(() => {
     setTransactions(currentTransactions => {
       const today = new Date();
@@ -89,7 +89,7 @@ const App: React.FC = () => {
     });
   }, [fixedItems]);
 
-  // --- Handlers ---
+  // --- Handlers (기존 유지) ---
   const handleDateClick = (date: Date) => {
     if (selectedDate && isSameDay(selectedDate, date)) {
       setSelectedDate(null);
@@ -130,25 +130,25 @@ const App: React.FC = () => {
     return balance;
   };
 
-  const isDetailsOpen = selectedDate && transactions.some(t => t.date === format(selectedDate, 'yyyy-MM-dd'));
+  const isDetailsOpen = !!(selectedDate && transactions.some(t => t.date === format(selectedDate, 'yyyy-MM-dd')));
 
-  // --- Render Helpers ---
+  // --- Render Helpers (모바일 최적화 스타일 적용) ---
   const renderHeader = () => {
     if (activeSettingsTab) return null;
     return (
-      <header className="flex-none px-6 pt-8 pb-6 bg-black text-white flex justify-between items-end z-10 rounded-b-[2.5rem] shadow-xl min-h-[120px] box-border">
+      <header className="flex-none px-6 pt-12 pb-6 bg-black text-white flex justify-between items-end z-10 rounded-b-[2.5rem] shadow-xl min-h-[140px] box-border">
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium tracking-wider text-gray-400 font-round">{getYear(currentDate)}</span>
+          <span className="text-xs font-medium tracking-wider text-gray-400 font-round">{getYear(currentDate)}</span>
           <div className="flex items-center gap-4 mt-1">
-             <button onClick={handlePrevMonth} className="hover:text-gray-300 transition-colors text-2xl font-round">{'<'}</button>
+             <button onClick={handlePrevMonth} className="hover:text-gray-300 transition-colors text-2xl font-round p-1">{'<'}</button>
              <h1 className="text-3xl font-round font-bold tracking-tight mb-1">{getMonth(currentDate) + 1}월</h1>
-             <button onClick={handleNextMonth} className="hover:text-gray-300 transition-colors text-2xl font-round">{'>'}</button>
+             <button onClick={handleNextMonth} className="hover:text-gray-300 transition-colors text-2xl font-round p-1">{'>'}</button>
           </div>
         </div>
         <div className="text-right pb-1">
           <p className="text-[10px] text-gray-400 mb-0.5 font-round opacity-80">총 잔액</p>
           <p className="text-xl font-round font-bold tracking-tight">
-            {getMonthBalance(currentDate).toLocaleString()} <span className="text-xs font-normal text-gray-500">KRW</span>
+            {getMonthBalance(currentDate).toLocaleString()} <span className="text-xs font-normal text-gray-500">₩</span>
           </p>
         </div>
       </header>
@@ -156,10 +156,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white sm:rounded-[2rem] sm:border-8 sm:border-gray-200 overflow-hidden relative shadow-2xl">
+    <div className="flex flex-col w-screen max-w-md mx-auto bg-white overflow-hidden relative shadow-2xl" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
       {renderHeader()}
 
-      <main className="flex-1 overflow-y-auto relative bg-white">
+      <main className="flex-1 overflow-y-auto relative bg-white pb-32 pt-2">
         {activeSettingsTab === 'STATISTICS' ? (
           <Statistics currentDate={currentDate} transactions={transactions} categories={categories} onPrevMonth={handlePrevMonth} onNextMonth={handleNextMonth} />
         ) : activeSettingsTab ? (
@@ -172,13 +172,16 @@ const App: React.FC = () => {
       {!activeSettingsTab && !isDetailsOpen && (
         <button 
           onClick={() => setIsTransactionFormOpen(true)}
-          className="absolute bottom-24 right-6 w-14 h-14 bg-black rounded-full flex items-center justify-center text-white shadow-xl hover:scale-105 active:scale-95 transition-all z-20"
+          className="fixed bottom-28 right-6 w-14 h-14 bg-black rounded-full flex items-center justify-center text-white shadow-xl hover:scale-105 active:scale-95 transition-all z-20"
         >
           <Plus size={28} />
         </button>
       )}
 
-      <BottomBar activeTab={activeSettingsTab || 'CALENDAR'} onTabClick={handleTabClick} />
+      {/* 하단 바 고정 영역 */}
+      <div className="fixed bottom-0 left-0 right-0 w-full max-w-md mx-auto bg-white border-t border-gray-100 z-50">
+        <BottomBar activeTab={activeSettingsTab || 'CALENDAR'} onTabClick={handleTabClick} />
+      </div>
 
       {isTransactionFormOpen && (
         <TransactionForm 
@@ -191,15 +194,19 @@ const App: React.FC = () => {
       )}
 
       {isDetailsOpen && selectedDate && (
-        <TransactionDetails
-          date={selectedDate}
-          transactions={transactions.filter(t => t.date === format(selectedDate, 'yyyy-MM-dd'))}
-          categories={categories}
-          profiles={profiles}
-          onClose={() => setSelectedDate(null)}
-          onDelete={handleDeleteTransaction}
-          onAdd={() => setIsTransactionFormOpen(true)}
-        />
+        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md bg-white rounded-[2.5rem] p-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
+            <TransactionDetails
+              date={selectedDate}
+              transactions={transactions.filter(t => t.date === format(selectedDate, 'yyyy-MM-dd'))}
+              categories={categories}
+              profiles={profiles}
+              onClose={() => setSelectedDate(null)}
+              onDelete={handleDeleteTransaction}
+              onAdd={() => setIsTransactionFormOpen(true)}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
